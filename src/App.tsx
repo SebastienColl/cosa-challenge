@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import axios from 'axios';
-import { Button, Col, Form, InputGroup, ListGroup, Row, Table } from 'react-bootstrap';
+import { Button, Col, Form, InputGroup, Row, Table } from 'react-bootstrap';
 
 import CanvasJSReact from "./canvasjs.react";
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -15,7 +15,6 @@ const App: React.FC<AppProps> = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [trace, setTrace] = useState<any>();
   const [data, setData] = useState<any>([]);
-  const [state, setState] = useState<string>("");
   const [isRunning, setIsRunning] = useState(false);
   const [query, setQuery] = useState("");
   const [xMinLimit, setXMinLimit] = useState<number>(1516);
@@ -82,13 +81,13 @@ const App: React.FC<AppProps> = () => {
         res.data.ydata.reverse()
         setTrace(res.data);
         setInstrumentResponse("TRACE FETCHED")
-        setQueriesHistory([... queriesHistory, {req: "STATE", response: "TRACE FETCHED", time: new Date()}])
+        setQueriesHistory([...queriesHistory, {req: "STATE", response: "TRACE FETCHED", time: new Date()}])
         setLoading(false)
       })
  }
 
  const displayTrace = () => {
-   const tempData = new Array()
+   const tempData = [];
    while (data.length !== 0) {
     tempData.push(data.pop());
   } 
@@ -103,7 +102,7 @@ const App: React.FC<AppProps> = () => {
   axios.get("http://127.0.0.1:5000/state")
   .then((res) => {
     setInstrumentResponse(res.data)
-    setQueriesHistory([... queriesHistory, {req: "STATE", response: res.data, time: new Date()}])
+    setQueriesHistory([...queriesHistory, {req: "STATE", response: res.data, time: new Date()}])
   })
  }
 
@@ -111,14 +110,14 @@ const App: React.FC<AppProps> = () => {
   axios.get("http://127.0.0.1:5000/single")
   .then((res) => {
     setInstrumentResponse(res.data)
-    setQueriesHistory([... queriesHistory, {req: "SINGLE", response: res.data, time: new Date()}])
+    setQueriesHistory([...queriesHistory, {req: "SINGLE", response: res.data, time: new Date()}])
   })
  }
 
  const setLimits = (min: any, max: any) => {
   axios.get(`http://127.0.0.1:5000/setlim/${min}/${max}`).then((res) => {
     setInstrumentResponse(res.data)
-    setQueriesHistory([... queriesHistory, {req: `/LIM/[${min},${max}]`, response: res.data, time: new Date()}])
+    setQueriesHistory([...queriesHistory, {req: `/LIM/[${min},${max}]`, response: res.data, time: new Date()}])
   });
 
  }
@@ -130,6 +129,8 @@ const App: React.FC<AppProps> = () => {
       <Row className="mx-2">
         <Col md={10}>
           <CanvasJSChart options={options} />
+          <p>Instrument model: {trace.instrument_model}</p>
+          <p>Instrument object: {trace.instrument_object}</p>
           <h2>Made by Sébastien Coll</h2>
         </Col>
         <Col md={2}>
@@ -138,14 +139,14 @@ const App: React.FC<AppProps> = () => {
               if(isRunning) {
                 axios.get("http://127.0.0.1:5000/stop").then((res) => {
                   setInstrumentResponse(res.data)
-                  setQueriesHistory([... queriesHistory, {req: "STOP", response: res.data, time: new Date()}])
+                  setQueriesHistory([...queriesHistory, {req: "STOP", response: res.data, time: new Date()}])
                   setIsRunning(false);
                 });
                 
               } else {
                 axios.get("http://127.0.0.1:5000/start").then((res) => {
                   setInstrumentResponse(res.data)
-                  setQueriesHistory([... queriesHistory, {req: "START", response: res.data, time: new Date()}]);
+                  setQueriesHistory([...queriesHistory, {req: "START", response: res.data, time: new Date()}]);
                   setIsRunning(true);
                 });
                 
@@ -184,7 +185,7 @@ const App: React.FC<AppProps> = () => {
               <Button onClick={() => {
                 axios.get(`http://127.0.0.1:5000/echo/${query}`).then((res) => {
                   setInstrumentResponse(res.data)
-                  setQueriesHistory([... queriesHistory, {req: query, response: res.data, time: new Date()}])
+                  setQueriesHistory([...queriesHistory, {req: query, response: res.data, time: new Date()}])
                 })
               }} className="ml-auto w-100 h-75" disabled={isRunning}> Send </Button>
             </Col>
