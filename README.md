@@ -5,6 +5,7 @@ Before setting up the project, make you you have Node.js, npm and Python (from M
 ## Available Scripts
 
 In the project directory, you can run:
+### Installing necessary Node dependencies
 
 ### `npm install`
 
@@ -12,13 +13,13 @@ Before starting the app, please run this command in the project directory in ord
 
 ### Installing necessary Python dependencies
 
-### pip install flask
+### `pip install flask`
 Before starting the API, please run this commands in the `/api` directory. Installs flask
 
-### pip install requests
+### `pip install requests`
 Before starting the API, please run this commands in the `/api` directory. Installs `requests` package.
 
-### pip install flask_cors
+### `pip install flask_cors`
 Before starting the API, please run this commands in the `/api` directory. Installs `flask_cors` package.
 
 ### Running the application
